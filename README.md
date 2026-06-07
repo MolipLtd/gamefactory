@@ -39,6 +39,23 @@ improvement selection.
   with `./doc2` evidence such as first action fun, first win, clear feedback, and
   low-friction FTUE.
 
+## Multi-Agent Debate Flow
+
+1. The deterministic mechanic catalog creates three candidate puzzle concepts.
+2. Market Agent checks U.S. hybrid-casual appeal, pitch clarity, target desire,
+   and lightweight progression.
+3. Coreplay Agent checks first action fun, feedback, core loop simplicity, and
+   short-session replay value.
+4. Level Design Agent checks the first tap to first win funnel, fair challenge,
+   goal readability, and the 3-level ramp.
+5. Production Agent checks whether the concept can be built as a stable offline
+   web prototype without auth, backend, external APIs, physics, or scope creep.
+6. Judge Agent compares the agent scores and document evidence, selects the
+   winning concept, then records why rejected candidates lost.
+7. After the prototype is generated, agents re-evaluate the built game and Judge
+   selects only the top 3 improvements from rubric weaknesses plus debate
+   evidence.
+
 ## Output
 
 - `demo-screenshot.png` and `runs/demo/demo-screenshot.png` — demo screenshots
