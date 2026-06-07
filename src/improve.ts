@@ -1,7 +1,10 @@
 import type {
+  CandidateEvaluation,
   GameSpec,
   Improvement,
+  ImprovementRationale,
   ImprovementReport,
+  PostBuildDebate,
   RubricDimensionId,
   Scorecard,
 } from "./types.js"
@@ -34,6 +37,50 @@ export function createImprovementReport(
     improvements,
     scopeDiscipline:
       "Only the selected top 3 rubric weaknesses were changed; no unrelated features were added.",
+  }
+}
+
+export function selectJudgeImprovementPriorities(
+  scorecard: Scorecard,
+  postBuildDebate: PostBuildDebate,
+): readonly RubricDimensionId[] {
+  const agentSignals = postBuildDebate.evaluations.flatMap((evaluation) =>
+    mapEvaluationToDimensions(evaluation),
+  )
+  const scores = scorecard.dimensions.map((dimension) => ({
+    id: dimension.id,
+    score: dimension.score - agentSignals.filter((signal) => signal === dimension.id).length * 0.25,
+  }))
+  return scores
+    .sort((left, right) => left.score - right.score)
+    .slice(0, 3)
+    .map((entry) => entry.id)
+}
+
+export function createImprovementRationale(
+  improvements: readonly Improvement[],
+  scorecard: Scorecard,
+  postBuildDebate: PostBuildDebate,
+): ImprovementRationale {
+  const selectedDimensions = improvements.map((improvement) => improvement.dimension)
+  const rubricEvidence = scorecard.dimensions
+    .filter((dimension) => selectedDimensions.includes(dimension.id))
+    .map(
+      (dimension) =>
+        `Rubric weakness ${dimension.label}: ${dimension.score}/5 before improvement — ${dimension.rationale}`,
+    )
+  return {
+    selected: improvements,
+    evidence: [
+      ...rubricEvidence,
+      ...postBuildDebate.evaluations.flatMap((evaluation) =>
+        evaluation.concreteImprovements.map(
+          (improvement) => `${evaluation.agent} on ${evaluation.candidateId}: ${improvement}`,
+        ),
+      ),
+    ],
+    judgeSummary:
+      "Judge selected the top 3 improvements by combining lowest rubric dimensions with repeated agent risks and concrete improvement recommendations.",
   }
 }
 
@@ -120,4 +167,23 @@ function applyImprovement(
     default:
       return assertNever(dimension)
   }
+}
+
+function mapEvaluationToDimensions(evaluation: CandidateEvaluation): readonly RubricDimensionId[] {
+  const joined = [
+    ...evaluation.fatalRisks,
+    ...evaluation.concreteImprovements,
+    ...evaluation.strengths,
+  ]
+    .join(" ")
+    .toLowerCase()
+  const dimensions: RubricDimensionId[] = []
+  if (joined.includes("first") || joined.includes("cue")) dimensions.push("first-success")
+  if (joined.includes("feedback") || joined.includes("pulse")) dimensions.push("immediate-feedback")
+  if (joined.includes("clear") || joined.includes("readable")) dimensions.push("5-second-clarity")
+  if (joined.includes("moves") || joined.includes("fair")) dimensions.push("fair-challenge")
+  if (joined.includes("collection") || joined.includes("progress")) {
+    dimensions.push("hybrid-casual-appeal")
+  }
+  return dimensions
 }

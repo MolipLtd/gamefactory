@@ -1,4 +1,4 @@
-import type { GameSpec, KnowledgeTraceEntry, LevelSpec } from "./types.js"
+import type { CandidateConcept, GameSpec, KnowledgeTraceEntry, LevelSpec } from "./types.js"
 import { mustGet, stableHash } from "./util.js"
 
 type MechanicTemplate = {
@@ -38,27 +38,73 @@ export function selectMechanic(prompt: string, principles: readonly string[]): M
   return mustGet(MECHANICS, index, "mechanic")
 }
 
-export function createInitialGameSpec(mechanic: MechanicTemplate): GameSpec {
+export function generateCandidateConcepts(
+  prompt: string,
+  principles: readonly string[],
+): readonly CandidateConcept[] {
+  const first = selectMechanic(prompt, principles)
+  const startIndex = MECHANICS.findIndex((mechanic) => mechanic.id === first.id)
+  return [0, 1, 2].map((offset) => {
+    const mechanic = mustGet(MECHANICS, (startIndex + offset) % MECHANICS.length, "candidate")
+    return {
+      id: `candidate-${offset + 1}`,
+      title: mechanic.title,
+      mechanicId: mechanic.id,
+      theme: mechanic.theme,
+      rules: mechanic.rules,
+      marketHook: marketHookFor(mechanic.id),
+      metaProgression: progressionFor(mechanic.id),
+    }
+  })
+}
+
+export function createInitialGameSpec(concept: CandidateConcept): GameSpec {
   return {
-    title: mechanic.title,
-    mechanicId: mechanic.id,
-    theme: mechanic.theme,
-    rules: mechanic.rules,
-    levels: createLevels(mechanic.id),
+    title: concept.title,
+    mechanicId: concept.mechanicId,
+    theme: concept.theme,
+    rules: concept.rules,
+    levels: createLevels(concept.mechanicId),
     feedback: ["soft tile pulse"],
-    metaProgression: "collect bloom badges after each level",
+    metaProgression: concept.metaProgression,
     clarityCue: "",
     successCue: "",
     failureCue: "Moves remaining explains each failed attempt",
   }
 }
 
-export function createMechanicTrace(mechanic: MechanicTemplate): KnowledgeTraceEntry {
+export function createMechanicTrace(concept: CandidateConcept): KnowledgeTraceEntry {
   return {
-    decision: `Selected ${mechanic.title} (${mechanic.id}) from the internal mechanic catalog.`,
-    source: "supplemental-heuristic",
+    decision: `Judge selected ${concept.title} (${concept.mechanicId}) from deterministic candidates.`,
+    source: "judge-resolution",
     rationale:
-      "The catalog is deterministic and small, satisfying the MVP breadth limit while supporting broad puzzle prompts.",
+      "The Judge Agent selects one candidate after Market, Coreplay, Level Design, and Production evaluations.",
+  }
+}
+
+function marketHookFor(mechanicId: string): string {
+  switch (mechanicId) {
+    case "path-link":
+      return "calm matching plus combo blooms for short-session puzzle appeal"
+    case "merge-lane":
+      return "snack-merging fantasy with clear collection goals"
+    case "shape-drop":
+      return "spatial fit satisfaction with delivery-streak progression"
+    default:
+      return "simple input with visible progression"
+  }
+}
+
+function progressionFor(mechanicId: string): string {
+  switch (mechanicId) {
+    case "path-link":
+      return "collect petals to unlock three garden badges"
+    case "merge-lane":
+      return "collect stars to fill a snack shelf"
+    case "shape-drop":
+      return "complete deliveries to stamp a route card"
+    default:
+      return "complete levels to fill a collection badge"
   }
 }
 

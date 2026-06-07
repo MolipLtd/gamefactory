@@ -1,8 +1,9 @@
 # CorePlay Lab
 
-CorePlay Lab is a greenfield Node/Vite/TypeScript MVP generated from Seed
-`seed_cf1b6208ab7b`. It runs a one-command, offline deterministic pipeline for
-hybrid-casual puzzle prototyping.
+CorePlay Lab is not just a game generator. It is an offline deterministic
+multi-agent coreplay validation system: agents debate candidate hybrid-casual
+puzzle concepts, a Judge Agent selects one, the system builds a playable
+prototype, agents re-evaluate it, and only the top 3 weaknesses are improved.
 
 ## Run
 
@@ -19,8 +20,20 @@ heuristics, and writes output to `./runs/demo`.
 
 - `runs/demo/index.html` — lightweight review page
 - `runs/demo/prototype/index.html` — playable 3-level puzzle prototype
-- `runs/demo/artifacts/*.json` and `*.md` — debate, scorecard, knowledge trace,
-  improvement report, run summary, and 2-minute demo script
+- `runs/demo/artifacts/candidate-debate.*` — 2-3 deterministic candidate concepts
+  and Market/Coreplay/Level Design/Production evaluations
+- `runs/demo/artifacts/judge-decision.*` — selected concept and Judge rationale
+- `runs/demo/artifacts/post-build-debate.*` — agent re-evaluation after the
+  prototype is built
+- `runs/demo/artifacts/improvement-rationale.*` — why the final top 3
+  improvements were selected from rubric weaknesses and agent debate
+- `runs/demo/artifacts/scorecard.*`, `knowledge-trace.*`, `improvements.*`, and
+  `demo-script.*` — final rubric score, traceability, before/after report, and
+  2-minute demo script
+
+Open `runs/demo/index.html` after running the command. The first screen shows the
+user prompt, candidate concepts, agent debate summary, Judge-selected concept,
+top 3 improvements, final prototype link, and final rubric score.
 
 ## Checks
 

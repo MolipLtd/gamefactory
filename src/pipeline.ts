@@ -1,15 +1,31 @@
 import { mkdir, rm } from "node:fs/promises"
 import { join } from "node:path"
-import { createKnowledgeTrace, runDeterministicDebate } from "./agents.js"
+import {
+  createDebateSummary,
+  createKnowledgeTrace,
+  decideWinningConcept,
+  runCandidateDebate,
+  runPostBuildDebate,
+} from "./agents.js"
 import { writeArtifacts } from "./artifacts.js"
 import { loadKnowledgeDocuments, summarizeDocumentPrinciples } from "./documents.js"
-import { createImprovementReport, improveGameSpec } from "./improve.js"
-import { createInitialGameSpec, createMechanicTrace, selectMechanic } from "./mechanics.js"
+import {
+  createImprovementRationale,
+  createImprovementReport,
+  improveGameSpec,
+  selectJudgeImprovementPriorities,
+} from "./improve.js"
+import {
+  createInitialGameSpec,
+  createMechanicTrace,
+  generateCandidateConcepts,
+} from "./mechanics.js"
 import { writePrototype } from "./prototype.js"
 import { writeReviewPage } from "./review.js"
-import { evaluateGameSpec, selectImprovementPriorities } from "./rubric.js"
+import { evaluateGameSpec } from "./rubric.js"
 import { serveForDemo } from "./server.js"
 import type { PipelineInput, PipelineResult } from "./types.js"
+import { CorePlayError } from "./util.js"
 
 export async function runCorePlayPipeline(input: PipelineInput): Promise<PipelineResult> {
   await rm(input.outputPath, { recursive: true, force: true })
@@ -17,19 +33,34 @@ export async function runCorePlayPipeline(input: PipelineInput): Promise<Pipelin
 
   const documents = await loadKnowledgeDocuments(input.docsPath)
   const principles = summarizeDocumentPrinciples(documents)
-  const mechanic = selectMechanic(input.prompt, principles)
-  const initialSpec = createInitialGameSpec(mechanic)
+  const candidates = generateCandidateConcepts(input.prompt, principles)
+  const candidateDebate = runCandidateDebate(input.prompt, candidates, principles)
+  const judgeDecision = decideWinningConcept(candidateDebate)
+  const selectedConcept = candidates.find(
+    (candidate) => candidate.id === judgeDecision.selectedCandidateId,
+  )
+  if (selectedConcept === undefined) {
+    throw new CorePlayError("Judge selected a missing candidate")
+  }
+
+  const initialSpec = createInitialGameSpec(selectedConcept)
   const initialScorecard = evaluateGameSpec(initialSpec)
-  const improvementPriorities = selectImprovementPriorities(initialScorecard)
+  const postBuildDebate = runPostBuildDebate(initialSpec)
+  const improvementPriorities = selectJudgeImprovementPriorities(initialScorecard, postBuildDebate)
   const improved = improveGameSpec(initialSpec, improvementPriorities)
   const finalScorecard = evaluateGameSpec(improved.spec)
-  const debateSummary = runDeterministicDebate(input.prompt, documents, principles, improved.spec)
-  const knowledgeTrace = createKnowledgeTrace(documents, createMechanicTrace(mechanic))
+  const debateSummary = createDebateSummary(input.prompt, documents, improved.spec, judgeDecision)
+  const knowledgeTrace = createKnowledgeTrace(documents, createMechanicTrace(selectedConcept))
   const improvementReport = createImprovementReport(
     initialScorecard,
     finalScorecard,
     improvementPriorities,
     improved.improvements,
+  )
+  const improvementRationale = createImprovementRationale(
+    improved.improvements,
+    initialScorecard,
+    postBuildDebate,
   )
   const prototypePath = await writePrototype(input.outputPath, improved.spec)
   const demoScript = createDemoScript(improved.spec.title, finalScorecard.total)
@@ -37,12 +68,16 @@ export async function runCorePlayPipeline(input: PipelineInput): Promise<Pipelin
   const partialResult = {
     prompt: input.prompt,
     documents,
+    candidateDebate,
+    judgeDecision,
     debateSummary,
+    postBuildDebate,
     knowledgeTrace,
     gameDesign: improved.spec,
     initialScorecard,
     improvementPriorities,
     improvementReport,
+    improvementRationale,
     finalScorecard,
     demoScript,
     outputPath: input.outputPath,

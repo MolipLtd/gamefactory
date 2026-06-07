@@ -31,6 +31,16 @@ export type GameSpec = {
   readonly failureCue: string
 }
 
+export type CandidateConcept = {
+  readonly id: string
+  readonly title: string
+  readonly mechanicId: string
+  readonly theme: string
+  readonly rules: readonly string[]
+  readonly marketHook: string
+  readonly metaProgression: string
+}
+
 export type KnowledgeDocument = {
   readonly path: string
   readonly title: string
@@ -58,11 +68,39 @@ export type AgentPosition = {
   readonly evidence: readonly string[]
 }
 
+export type CandidateEvaluation = {
+  readonly agent: Exclude<AgentRole, "Judge Agent">
+  readonly candidateId: string
+  readonly strengths: readonly string[]
+  readonly fatalRisks: readonly string[]
+  readonly concreteImprovements: readonly string[]
+  readonly score: number
+}
+
+export type CandidateDebate = {
+  readonly prompt: string
+  readonly candidates: readonly CandidateConcept[]
+  readonly evaluations: readonly CandidateEvaluation[]
+}
+
+export type JudgeDecision = {
+  readonly selectedCandidateId: string
+  readonly selectedTitle: string
+  readonly rationale: string
+  readonly rejectedCandidates: readonly string[]
+  readonly buildPriorities: readonly string[]
+}
+
 export type DebateSummary = {
   readonly prompt: string
   readonly positions: readonly AgentPosition[]
   readonly judgePriorities: readonly string[]
   readonly conflictResolutions: readonly string[]
+}
+
+export type PostBuildDebate = {
+  readonly evaluations: readonly CandidateEvaluation[]
+  readonly judgeSummary: string
 }
 
 export type RubricScore = {
@@ -93,6 +131,12 @@ export type ImprovementReport = {
   readonly scopeDiscipline: string
 }
 
+export type ImprovementRationale = {
+  readonly selected: readonly Improvement[]
+  readonly evidence: readonly string[]
+  readonly judgeSummary: string
+}
+
 export type PipelineInput = {
   readonly prompt: string
   readonly docsPath: string
@@ -103,12 +147,16 @@ export type PipelineInput = {
 export type PipelineResult = {
   readonly prompt: string
   readonly documents: readonly KnowledgeDocument[]
+  readonly candidateDebate: CandidateDebate
+  readonly judgeDecision: JudgeDecision
   readonly debateSummary: DebateSummary
+  readonly postBuildDebate: PostBuildDebate
   readonly knowledgeTrace: readonly KnowledgeTraceEntry[]
   readonly gameDesign: GameSpec
   readonly initialScorecard: Scorecard
   readonly improvementPriorities: readonly RubricDimensionId[]
   readonly improvementReport: ImprovementReport
+  readonly improvementRationale: ImprovementRationale
   readonly finalScorecard: Scorecard
   readonly demoScript: string
   readonly outputPath: string

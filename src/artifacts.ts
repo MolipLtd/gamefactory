@@ -1,9 +1,13 @@
 import { mkdir, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 import {
+  candidateDebateMarkdown,
   debateMarkdown,
   demoScriptMarkdown,
+  improvementRationaleMarkdown,
   improvementsMarkdown,
+  judgeDecisionMarkdown,
+  postBuildDebateMarkdown,
   scorecardMarkdown,
   traceMarkdown,
 } from "./markdown.js"
@@ -21,6 +25,26 @@ export async function writeArtifacts(outputPath: string, result: PipelineResult)
   await Promise.all([
     writeJson(join(artifactsPath, "debate.json"), result.debateSummary),
     writeFile(join(artifactsPath, "debate.md"), debateMarkdown(result.debateSummary)),
+    writeJson(join(artifactsPath, "candidate-debate.json"), result.candidateDebate),
+    writeFile(
+      join(artifactsPath, "candidate-debate.md"),
+      candidateDebateMarkdown(result.candidateDebate),
+    ),
+    writeJson(join(artifactsPath, "judge-decision.json"), result.judgeDecision),
+    writeFile(
+      join(artifactsPath, "judge-decision.md"),
+      judgeDecisionMarkdown(result.judgeDecision),
+    ),
+    writeJson(join(artifactsPath, "post-build-debate.json"), result.postBuildDebate),
+    writeFile(
+      join(artifactsPath, "post-build-debate.md"),
+      postBuildDebateMarkdown(result.postBuildDebate),
+    ),
+    writeJson(join(artifactsPath, "improvement-rationale.json"), result.improvementRationale),
+    writeFile(
+      join(artifactsPath, "improvement-rationale.md"),
+      improvementRationaleMarkdown(result.improvementRationale),
+    ),
     writeJson(join(artifactsPath, "scorecard.json"), result.finalScorecard),
     writeFile(join(artifactsPath, "scorecard.md"), scorecardMarkdown(result.finalScorecard)),
     writeJson(join(artifactsPath, "knowledge-trace.json"), result.knowledgeTrace),
@@ -38,15 +62,23 @@ export async function writeArtifacts(outputPath: string, result: PipelineResult)
 
 function summarizeRun(result: PipelineResult): {
   readonly debateSummary: DebateSummary
+  readonly candidateDebate: PipelineResult["candidateDebate"]
+  readonly judgeDecision: PipelineResult["judgeDecision"]
   readonly finalScorecard: Scorecard
+  readonly postBuildDebate: PipelineResult["postBuildDebate"]
   readonly knowledgeTrace: readonly KnowledgeTraceEntry[]
   readonly improvementReport: ImprovementReport
+  readonly improvementRationale: PipelineResult["improvementRationale"]
 } {
   return {
     debateSummary: result.debateSummary,
+    candidateDebate: result.candidateDebate,
+    judgeDecision: result.judgeDecision,
     finalScorecard: result.finalScorecard,
+    postBuildDebate: result.postBuildDebate,
     knowledgeTrace: result.knowledgeTrace,
     improvementReport: result.improvementReport,
+    improvementRationale: result.improvementRationale,
   }
 }
 

@@ -44,18 +44,30 @@ describe("CorePlay pipeline", () => {
 
     // Then
     expect(first.debateSummary).toEqual(second.debateSummary)
+    expect(first.candidateDebate).toEqual(second.candidateDebate)
+    expect(first.judgeDecision).toEqual(second.judgeDecision)
     expect(first.finalScorecard).toEqual(second.finalScorecard)
     expect(first.improvementPriorities.length).toBeLessThanOrEqual(3)
     expect(first.gameDesign.levels).toHaveLength(3)
+    expect(first.gameDesign.title).toBe(first.judgeDecision.selectedTitle)
     expect(first.forbiddenFeaturesAbsent).toBe(true)
 
     await expect(stat(join(firstOut, "prototype", "index.html"))).resolves.toBeTruthy()
     await expect(stat(join(firstOut, "index.html"))).resolves.toBeTruthy()
+    await expect(stat(join(firstOut, "artifacts", "candidate-debate.json"))).resolves.toBeTruthy()
+    await expect(stat(join(firstOut, "artifacts", "candidate-debate.md"))).resolves.toBeTruthy()
+    await expect(stat(join(firstOut, "artifacts", "judge-decision.json"))).resolves.toBeTruthy()
+    await expect(stat(join(firstOut, "artifacts", "post-build-debate.md"))).resolves.toBeTruthy()
+    await expect(
+      stat(join(firstOut, "artifacts", "improvement-rationale.md")),
+    ).resolves.toBeTruthy()
     await expect(stat(join(firstOut, "artifacts", "scorecard.json"))).resolves.toBeTruthy()
     await expect(stat(join(firstOut, "artifacts", "scorecard.md"))).resolves.toBeTruthy()
 
     const review = await readFile(join(firstOut, "index.html"), "utf8")
     expect(review).toContain("prototype/index.html")
     expect(review).toContain("Knowledge Trace")
+    expect(review).toContain("Candidate Concepts")
+    expect(review).toContain("Judge-Selected Concept")
   })
 })

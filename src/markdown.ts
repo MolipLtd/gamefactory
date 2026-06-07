@@ -1,4 +1,62 @@
-import type { DebateSummary, ImprovementReport, KnowledgeTraceEntry, Scorecard } from "./types.js"
+import type {
+  CandidateDebate,
+  DebateSummary,
+  ImprovementRationale,
+  ImprovementReport,
+  JudgeDecision,
+  KnowledgeTraceEntry,
+  PostBuildDebate,
+  Scorecard,
+} from "./types.js"
+
+export function candidateDebateMarkdown(debate: CandidateDebate): string {
+  const candidates = debate.candidates
+    .map(
+      (candidate) =>
+        `## ${candidate.title}\n\nMechanic: ${candidate.mechanicId}\n\n${candidate.theme}\n\nMarket hook: ${candidate.marketHook}\n`,
+    )
+    .join("\n")
+  const evaluations = debate.evaluations
+    .map(
+      (evaluation) =>
+        `### ${evaluation.agent} on ${evaluation.candidateId}\n\nStrengths:\n${bullets(
+          evaluation.strengths,
+        )}\n\nFatal risks:\n${bullets(evaluation.fatalRisks)}\n\nConcrete improvements:\n${bullets(
+          evaluation.concreteImprovements,
+        )}\n\nScore: ${evaluation.score}\n`,
+    )
+    .join("\n")
+  return `# Candidate Debate\n\nPrompt: ${debate.prompt}\n\n${candidates}\n# Agent Evaluations\n\n${evaluations}`
+}
+
+export function judgeDecisionMarkdown(decision: JudgeDecision): string {
+  return `# Judge Decision\n\nSelected concept: **${decision.selectedTitle}** (${decision.selectedCandidateId})\n\n${decision.rationale}\n\n## Build Priorities\n\n${bullets(
+    decision.buildPriorities,
+  )}\n\n## Rejected Candidates\n\n${bullets(decision.rejectedCandidates)}\n`
+}
+
+export function postBuildDebateMarkdown(debate: PostBuildDebate): string {
+  const evaluations = debate.evaluations
+    .map(
+      (evaluation) =>
+        `## ${evaluation.agent}\n\nStrengths:\n${bullets(
+          evaluation.strengths,
+        )}\n\nFatal risks:\n${bullets(evaluation.fatalRisks)}\n\nConcrete improvements:\n${bullets(
+          evaluation.concreteImprovements,
+        )}\n`,
+    )
+    .join("\n")
+  return `# Post-Build Debate\n\n${debate.judgeSummary}\n\n${evaluations}`
+}
+
+export function improvementRationaleMarkdown(rationale: ImprovementRationale): string {
+  const selected = rationale.selected
+    .map((improvement) => `- **${improvement.dimension}**: ${improvement.change}`)
+    .join("\n")
+  return `# Improvement Rationale\n\n${rationale.judgeSummary}\n\n## Selected Top 3\n\n${selected}\n\n## Evidence\n\n${bullets(
+    rationale.evidence,
+  )}\n`
+}
 
 export function debateMarkdown(debate: DebateSummary): string {
   const positions = debate.positions
