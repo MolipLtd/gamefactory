@@ -18,6 +18,7 @@ heuristics, and writes output to `./runs/demo`.
 
 ## Output
 
+- `demo-screenshot.png` — demo screenshot for submission
 - `runs/demo/index.html` — lightweight review page
 - `runs/demo/prototype/index.html` — playable 3-level puzzle prototype
 - `runs/demo/artifacts/candidate-debate.*` — 2-3 deterministic candidate concepts
