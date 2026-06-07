@@ -5,6 +5,10 @@ multi-agent coreplay validation system: agents debate candidate hybrid-casual
 puzzle concepts, a Judge Agent selects one, the system builds a playable
 prototype, agents re-evaluate it, and only the top 3 weaknesses are improved.
 
+The submitted game knowledge docs live in repo-local `./doc2` (copied from the
+provided `docs2` folder). They are the primary grounding source for the idea
+validation phase, not just final-report metadata.
+
 ## Run With Game Knowledge Docs
 
 ```bash
@@ -22,6 +26,18 @@ first win, visual feedback, low-friction onboarding, fast rewards, and feasible
 prototype execution. Those factors are applied during candidate concept
 generation, agent debate, Judge selection, post-build evaluation, and top-3
 improvement selection.
+
+## How The Docs Drive Validation
+
+- Candidate concepts record `knowledgeFit` against the extracted `./doc2`
+  success factors.
+- Market, Coreplay, Level Design, and Production Agent evaluations include
+  document-derived evidence for each candidate.
+- The Judge Agent selects the winning concept using those debate scores and
+  records the document-grounded rationale.
+- Post-build debate and top-3 improvement selection combine rubric weaknesses
+  with `./doc2` evidence such as first action fun, first win, clear feedback, and
+  low-friction FTUE.
 
 ## Output
 
@@ -47,6 +63,8 @@ concepts, agent debate summary, Judge-selected concept, top 3 improvements,
 final prototype link, and final rubric score.
 
 Reusable workflow notes live in `skills/coreplay-lab/SKILL.md`.
+
+Current generated demo result: `Circuit Bloom`, final score `29/35`.
 
 ## Checks
 
