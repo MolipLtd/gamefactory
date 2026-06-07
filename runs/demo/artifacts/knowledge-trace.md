@@ -1,0 +1,9 @@
+# Knowledge Trace
+
+- **Treat FTUE 평가법(다듬어야 함) as primary grounding.** (user-document) — User-provided game knowledge documents govern philosophy, rubric definitions, constraints, and do-not-build rules.
+- **Treat FTUE(First-Time User Experience) 최적화 가이드 as primary grounding.** (user-document) — User-provided game knowledge documents govern philosophy, rubric definitions, constraints, and do-not-build rules.
+- **Treat 게임을 잘 만드는 법 as primary grounding.** (user-document) — User-provided game knowledge documents govern philosophy, rubric definitions, constraints, and do-not-build rules.
+- **Treat 시장 조사 및 게임 아이디어 도출 가이드 as primary grounding.** (user-document) — User-provided game knowledge documents govern philosophy, rubric definitions, constraints, and do-not-build rules.
+- **Apply extracted user success factors to candidate idea validation.** (user-document) — The first action must expose the core fun immediately.; Map the first-session funnel from first tap to first win.; Use visual cues and responsive feedback to keep goals readable.; Minimize FTUE friction such as login, forced waits, and paywalls.; The core loop should be simple, repeatable, and addictive.; Give fast, clear rewards tied to the player's action.
+- **Judge selected Circuit Bloom (path-link) from deterministic candidates.** (judge-resolution) — The Judge Agent selects one candidate after Market, Coreplay, Level Design, and Production evaluations. Knowledge fit: one-sentence pitch and fast hook; first action exposes the core fun; visible feedback and quick reward; U.S. hybrid-casual audience value; clear matching loop with low prototype risk
+- **Use offline deterministic agents instead of an LLM provider.** (judge-resolution) — The Seed requires the full demo path to work without network access, API keys, or external dependencies.

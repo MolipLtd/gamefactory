@@ -39,6 +39,7 @@ export type CandidateConcept = {
   readonly rules: readonly string[]
   readonly marketHook: string
   readonly metaProgression: string
+  readonly knowledgeFit: readonly string[]
 }
 
 export type KnowledgeDocument = {
@@ -71,6 +72,7 @@ export type AgentPosition = {
 export type CandidateEvaluation = {
   readonly agent: Exclude<AgentRole, "Judge Agent">
   readonly candidateId: string
+  readonly evidence: readonly string[]
   readonly strengths: readonly string[]
   readonly fatalRisks: readonly string[]
   readonly concreteImprovements: readonly string[]
@@ -79,6 +81,8 @@ export type CandidateEvaluation = {
 
 export type CandidateDebate = {
   readonly prompt: string
+  readonly loadedDocuments: readonly string[]
+  readonly knowledgePrinciples: readonly string[]
   readonly candidates: readonly CandidateConcept[]
   readonly evaluations: readonly CandidateEvaluation[]
 }
@@ -87,6 +91,7 @@ export type JudgeDecision = {
   readonly selectedCandidateId: string
   readonly selectedTitle: string
   readonly rationale: string
+  readonly knowledgeEvidence: readonly string[]
   readonly rejectedCandidates: readonly string[]
   readonly buildPriorities: readonly string[]
 }
@@ -134,6 +139,7 @@ export type ImprovementReport = {
 export type ImprovementRationale = {
   readonly selected: readonly Improvement[]
   readonly evidence: readonly string[]
+  readonly knowledgeEvidence: readonly string[]
   readonly judgeSummary: string
 }
 

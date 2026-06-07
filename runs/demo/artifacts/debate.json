@@ -1,0 +1,64 @@
+{
+  "prompt": "Make a U.S.-popular hybrid-casual puzzle game",
+  "positions": [
+    {
+      "agent": "Market Agent",
+      "position": "Circuit Bloom fits U.S. hybrid-casual expectations by pairing simple input with collection progress.",
+      "priorities": [
+        "clear first action",
+        "visible reward loop",
+        "short-session progression"
+      ],
+      "evidence": [
+        "The first action must expose the core fun immediately.",
+        "Map the first-session funnel from first tap to first win.",
+        "Use visual cues and responsive feedback to keep goals readable."
+      ]
+    },
+    {
+      "agent": "Coreplay Agent",
+      "position": "Moment-to-moment play needs stronger first-action feedback and a fast first success.",
+      "priorities": [
+        "5-second clarity",
+        "immediate feedback",
+        "first success"
+      ],
+      "evidence": [
+        "Default rubric prioritizes clarity, feedback, and first success."
+      ]
+    },
+    {
+      "agent": "Level Design Agent",
+      "position": "Three levels should introduce, vary, and test the mechanic without random-feeling failures.",
+      "priorities": [
+        "intro level",
+        "choice level",
+        "combo level"
+      ],
+      "evidence": [
+        "Seed requires exactly 3 levels and fair challenge."
+      ]
+    },
+    {
+      "agent": "Production Agent",
+      "position": "Static HTML/CSS/JS output is the safest demo-stable path with no backend or external APIs.",
+      "priorities": [
+        "static prototype",
+        "restart button",
+        "local review page"
+      ],
+      "evidence": [
+        "Seed excludes backend, external APIs, auth, and database."
+      ]
+    }
+  ],
+  "judgePriorities": [
+    "5-second clarity",
+    "immediate feedback",
+    "first success"
+  ],
+  "conflictResolutions": [
+    "If a document principle conflicts with a heuristic, the Judge Agent gives the document principle priority.",
+    "No embedded heuristic may override user do-not-build rules."
+  ]
+}

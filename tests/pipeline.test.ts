@@ -12,10 +12,13 @@ async function createDocsFixture(root: string): Promise<string> {
     [
       "# Puzzle Principles",
       "Prioritize 5-second clarity and fair challenge.",
+      "The first action must expose the core fun immediately.",
+      "Map the funnel from first tap to first win.",
       "Do not build complex physics, multiplayer, login, payments, or external APIs.",
       "Use lightweight collection or combo progression.",
     ].join("\n"),
   )
+  await writeFile(join(docsPath, "._ignored.md"), "# AppleDouble metadata should be ignored")
   return docsPath
 }
 
@@ -47,6 +50,16 @@ describe("CorePlay pipeline", () => {
     expect(first.candidateDebate).toEqual(second.candidateDebate)
     expect(first.judgeDecision).toEqual(second.judgeDecision)
     expect(first.finalScorecard).toEqual(second.finalScorecard)
+    expect(first.candidateDebate.loadedDocuments).toHaveLength(1)
+    expect(first.candidateDebate.knowledgePrinciples).toContain(
+      "The first action must expose the core fun immediately.",
+    )
+    expect(first.candidateDebate.evaluations[0]?.evidence.length).toBeGreaterThan(0)
+    expect(first.judgeDecision.knowledgeEvidence.length).toBeGreaterThan(0)
+    expect(first.improvementRationale.knowledgeEvidence.length).toBeGreaterThan(0)
+    expect(first.knowledgeTrace.some((entry) => entry.decision.includes("idea validation"))).toBe(
+      true,
+    )
     expect(first.improvementPriorities.length).toBeLessThanOrEqual(3)
     expect(first.gameDesign.levels).toHaveLength(3)
     expect(first.gameDesign.title).toBe(first.judgeDecision.selectedTitle)

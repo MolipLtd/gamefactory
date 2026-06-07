@@ -15,10 +15,13 @@ import { mustGet } from "./util.js"
 export function runCandidateDebate(
   prompt: string,
   candidates: readonly CandidateConcept[],
+  documents: readonly KnowledgeDocument[],
   principles: readonly string[],
 ): CandidateDebate {
   return {
     prompt,
+    loadedDocuments: documents.map((document) => document.path),
+    knowledgePrinciples: principles,
     candidates,
     evaluations: candidates.flatMap((candidate) => evaluateCandidate(candidate, principles)),
   }
@@ -37,15 +40,19 @@ export function decideWinningConcept(debate: CandidateDebate): JudgeDecision {
   return {
     selectedCandidateId: winner.id,
     selectedTitle: winner.title,
-    rationale: `${winner.title} has the best combined market clarity, core feedback potential, level scalability, and static-demo feasibility.`,
+    rationale: `${winner.title} best satisfies the loaded user knowledge: one-sentence clarity, fast FTUE feedback, first-win funnel, and low-risk prototype feasibility.`,
+    knowledgeEvidence: winner.knowledgeFit,
     rejectedCandidates: ranked
       .slice(1)
-      .map((entry) => `${entry.candidate.title}: lower combined agent confidence`),
+      .map(
+        (entry) =>
+          `${entry.candidate.title}: lower combined agent confidence against the loaded success factors`,
+      ),
     buildPriorities: ["5-second clarity", "immediate feedback", "first success"],
   }
 }
 
-export function runPostBuildDebate(spec: GameSpec): PostBuildDebate {
+export function runPostBuildDebate(spec: GameSpec, principles: readonly string[]): PostBuildDebate {
   const concept: CandidateConcept = {
     id: "built-prototype",
     title: spec.title,
@@ -54,8 +61,10 @@ export function runPostBuildDebate(spec: GameSpec): PostBuildDebate {
     rules: spec.rules,
     marketHook: "generated playable prototype",
     metaProgression: spec.metaProgression,
+    knowledgeFit: principles.slice(0, 4),
   }
   const evaluations = evaluateCandidate(concept, [
+    ...principles,
     "Prototype is now concrete; post-build review prioritizes visible clarity and stability.",
   ])
   return {
@@ -112,6 +121,7 @@ export function createDebateSummary(
 
 export function createKnowledgeTrace(
   documents: readonly KnowledgeDocument[],
+  principles: readonly string[],
   extra: KnowledgeTraceEntry,
 ): readonly KnowledgeTraceEntry[] {
   const documentTrace = documents.map((document) => ({
@@ -122,6 +132,11 @@ export function createKnowledgeTrace(
   }))
   return [
     ...documentTrace,
+    {
+      decision: "Apply extracted user success factors to candidate idea validation.",
+      source: "user-document",
+      rationale: principles.slice(0, 6).join("; "),
+    },
     extra,
     {
       decision: "Use offline deterministic agents instead of an LLM provider.",
@@ -136,22 +151,24 @@ function evaluateCandidate(
   candidate: CandidateConcept,
   principles: readonly string[],
 ): readonly CandidateEvaluation[] {
-  const primaryEvidence = principles.slice(0, 2)
+  const evidence = knowledgeEvidenceFor(candidate, principles)
   return [
     {
       agent: "Market Agent",
       candidateId: candidate.id,
+      evidence: evidence.market,
       strengths: [candidate.marketHook, "simple theme readable in a short demo"],
       fatalRisks: marketRisk(candidate),
       concreteImprovements: [
         "make the first reward visible",
         "show collection progress on the first screen",
       ],
-      score: candidate.mechanicId === "merge-lane" ? 18 : 16,
+      score: candidate.mechanicId === "merge-lane" ? 18 : 17,
     },
     {
       agent: "Coreplay Agent",
       candidateId: candidate.id,
+      evidence: evidence.coreplay,
       strengths: ["one clear core action", "combo potential from repeated choices"],
       fatalRisks: ["weak first-action feedback would make the game feel inert"],
       concreteImprovements: ["add pulse feedback", "add a fast first success cue"],
@@ -160,6 +177,7 @@ function evaluateCandidate(
     {
       agent: "Level Design Agent",
       candidateId: candidate.id,
+      evidence: evidence.level,
       strengths: ["three-level ramp can introduce, vary, then test the mechanic"],
       fatalRisks: ["too many rules would obscure fairness"],
       concreteImprovements: ["keep one goal per level", "show moves and target progress"],
@@ -168,12 +186,69 @@ function evaluateCandidate(
     {
       agent: "Production Agent",
       candidateId: candidate.id,
-      strengths: ["static HTML prototype is feasible", ...primaryEvidence],
+      evidence: evidence.production,
+      strengths: ["static HTML prototype is feasible", ...candidate.knowledgeFit.slice(0, 2)],
       fatalRisks: productionRisk(candidate),
       concreteImprovements: ["avoid physics", "prefer deterministic tile interactions"],
       score: candidate.mechanicId === "path-link" ? 19 : 15,
     },
   ]
+}
+
+function knowledgeEvidenceFor(
+  candidate: CandidateConcept,
+  principles: readonly string[],
+): {
+  readonly market: readonly string[]
+  readonly coreplay: readonly string[]
+  readonly level: readonly string[]
+  readonly production: readonly string[]
+} {
+  return {
+    market: unique(
+      pickEvidence(principles, ["market", "audience", "user value", "one sentence"]).concat(
+        candidate.knowledgeFit.slice(0, 1),
+      ),
+    ),
+    coreplay: unique(
+      pickEvidence(principles, ["core", "first action", "feedback", "reward"]).concat(
+        candidate.knowledgeFit.slice(1, 2),
+      ),
+    ),
+    level: unique(
+      pickEvidence(principles, ["first win", "goal", "fair", "visual cue"]).concat(
+        candidate.knowledgeFit.slice(2, 3),
+      ),
+    ),
+    production: unique(
+      pickEvidence(principles, ["prototype", "friction", "login", "paywall"]).concat(
+        candidate.knowledgeFit.slice(3, 4),
+      ),
+    ),
+  }
+}
+
+function pickEvidence(
+  principles: readonly string[],
+  needles: readonly string[],
+): readonly string[] {
+  const matches = principles.filter((principle) => {
+    const normalized = principle.toLowerCase()
+    return needles.some((needle) => normalized.includes(needle))
+  })
+  return (matches.length > 0 ? matches : principles).slice(0, 3)
+}
+
+function unique(items: readonly string[]): readonly string[] {
+  const seen = new Set<string>()
+  const result: string[] = []
+  for (const item of items) {
+    if (!seen.has(item)) {
+      seen.add(item)
+      result.push(item)
+    }
+  }
+  return result
 }
 
 function marketRisk(candidate: CandidateConcept): readonly string[] {

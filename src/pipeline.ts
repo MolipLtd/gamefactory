@@ -34,7 +34,7 @@ export async function runCorePlayPipeline(input: PipelineInput): Promise<Pipelin
   const documents = await loadKnowledgeDocuments(input.docsPath)
   const principles = summarizeDocumentPrinciples(documents)
   const candidates = generateCandidateConcepts(input.prompt, principles)
-  const candidateDebate = runCandidateDebate(input.prompt, candidates, principles)
+  const candidateDebate = runCandidateDebate(input.prompt, candidates, documents, principles)
   const judgeDecision = decideWinningConcept(candidateDebate)
   const selectedConcept = candidates.find(
     (candidate) => candidate.id === judgeDecision.selectedCandidateId,
@@ -45,12 +45,16 @@ export async function runCorePlayPipeline(input: PipelineInput): Promise<Pipelin
 
   const initialSpec = createInitialGameSpec(selectedConcept)
   const initialScorecard = evaluateGameSpec(initialSpec)
-  const postBuildDebate = runPostBuildDebate(initialSpec)
+  const postBuildDebate = runPostBuildDebate(initialSpec, principles)
   const improvementPriorities = selectJudgeImprovementPriorities(initialScorecard, postBuildDebate)
   const improved = improveGameSpec(initialSpec, improvementPriorities)
   const finalScorecard = evaluateGameSpec(improved.spec)
   const debateSummary = createDebateSummary(input.prompt, documents, improved.spec, judgeDecision)
-  const knowledgeTrace = createKnowledgeTrace(documents, createMechanicTrace(selectedConcept))
+  const knowledgeTrace = createKnowledgeTrace(
+    documents,
+    principles,
+    createMechanicTrace(selectedConcept),
+  )
   const improvementReport = createImprovementReport(
     initialScorecard,
     finalScorecard,
@@ -61,6 +65,7 @@ export async function runCorePlayPipeline(input: PipelineInput): Promise<Pipelin
     improved.improvements,
     initialScorecard,
     postBuildDebate,
+    principles,
   )
   const prototypePath = await writePrototype(input.outputPath, improved.spec)
   const demoScript = createDemoScript(improved.spec.title, finalScorecard.total)

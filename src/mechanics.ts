@@ -54,6 +54,7 @@ export function generateCandidateConcepts(
       rules: mechanic.rules,
       marketHook: marketHookFor(mechanic.id),
       metaProgression: progressionFor(mechanic.id),
+      knowledgeFit: knowledgeFitFor(mechanic.id, principles),
     }
   })
 }
@@ -77,8 +78,7 @@ export function createMechanicTrace(concept: CandidateConcept): KnowledgeTraceEn
   return {
     decision: `Judge selected ${concept.title} (${concept.mechanicId}) from deterministic candidates.`,
     source: "judge-resolution",
-    rationale:
-      "The Judge Agent selects one candidate after Market, Coreplay, Level Design, and Production evaluations.",
+    rationale: `The Judge Agent selects one candidate after Market, Coreplay, Level Design, and Production evaluations. Knowledge fit: ${concept.knowledgeFit.join("; ")}`,
   }
 }
 
@@ -106,6 +106,41 @@ function progressionFor(mechanicId: string): string {
     default:
       return "complete levels to fill a collection badge"
   }
+}
+
+function knowledgeFitFor(mechanicId: string, principles: readonly string[]): readonly string[] {
+  const joined = principles.join(" ").toLowerCase()
+  const factors: string[] = []
+  if (
+    joined.includes("one sentence") ||
+    joined.includes("short video") ||
+    joined.includes("hook")
+  ) {
+    factors.push("one-sentence pitch and fast hook")
+  }
+  if (
+    joined.includes("first action") ||
+    joined.includes("first tap") ||
+    joined.includes("30 seconds")
+  ) {
+    factors.push("first action exposes the core fun")
+  }
+  if (joined.includes("visual") || joined.includes("feedback") || joined.includes("reward")) {
+    factors.push("visible feedback and quick reward")
+  }
+  if (joined.includes("market") || joined.includes("audience") || joined.includes("user value")) {
+    factors.push("U.S. hybrid-casual audience value")
+  }
+  if (mechanicId === "path-link") {
+    factors.push("clear matching loop with low prototype risk")
+  }
+  if (mechanicId === "merge-lane") {
+    factors.push("collection-friendly merge loop")
+  }
+  if (mechanicId === "shape-drop") {
+    factors.push("strong spatial satisfaction but higher control risk")
+  }
+  return factors.slice(0, 5)
 }
 
 function createLevels(mechanicId: string): readonly LevelSpec[] {

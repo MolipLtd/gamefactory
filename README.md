@@ -5,24 +5,33 @@ multi-agent coreplay validation system: agents debate candidate hybrid-casual
 puzzle concepts, a Judge Agent selects one, the system builds a playable
 prototype, agents re-evaluate it, and only the top 3 weaknesses are improved.
 
-## Run
+## Run With Game Knowledge Docs
 
 ```bash
 npm install
-npm run coreplay -- --prompt "Make a U.S.-popular hybrid-casual puzzle game" --docs ./docs --out ./runs/demo
+npm run coreplay -- --prompt "Make a U.S.-popular hybrid-casual puzzle game" --docs ./doc2 --out ./runs/demo
 ```
 
-The command reads Markdown/plain-text docs from `./docs`, treats those user docs as
+The command reads Markdown/plain-text docs from `./doc2`, treats those user docs as
 the primary grounding source, supplements with embedded deterministic game-design
 heuristics, and writes output to `./runs/demo`.
 
+The included `./doc2` documents capture game success factors around market appeal,
+target-user desire, one-sentence pitch clarity, FTUE hook, first action fun,
+first win, visual feedback, low-friction onboarding, fast rewards, and feasible
+prototype execution. Those factors are applied during candidate concept
+generation, agent debate, Judge selection, post-build evaluation, and top-3
+improvement selection.
+
 ## Output
 
-- `demo-screenshot.png` — demo screenshot for submission
+- `demo-screenshot.png` and `runs/demo/demo-screenshot.png` — demo screenshots
+  for submission
 - `runs/demo/index.html` — lightweight review page
 - `runs/demo/prototype/index.html` — playable 3-level puzzle prototype
 - `runs/demo/artifacts/candidate-debate.*` — 2-3 deterministic candidate concepts
-  and Market/Coreplay/Level Design/Production evaluations
+  and Market/Coreplay/Level Design/Production evaluations, including extracted
+  `./doc2` success-factor evidence
 - `runs/demo/artifacts/judge-decision.*` — selected concept and Judge rationale
 - `runs/demo/artifacts/post-build-debate.*` — agent re-evaluation after the
   prototype is built
@@ -33,8 +42,11 @@ heuristics, and writes output to `./runs/demo`.
   2-minute demo script
 
 Open `runs/demo/index.html` after running the command. The first screen shows the
-user prompt, candidate concepts, agent debate summary, Judge-selected concept,
-top 3 improvements, final prototype link, and final rubric score.
+user prompt, loaded `./doc2` documents, extracted success factors, candidate
+concepts, agent debate summary, Judge-selected concept, top 3 improvements,
+final prototype link, and final rubric score.
+
+Reusable workflow notes live in `skills/coreplay-lab/SKILL.md`.
 
 ## Checks
 

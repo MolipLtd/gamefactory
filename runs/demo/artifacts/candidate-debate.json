@@ -1,0 +1,375 @@
+{
+  "prompt": "Make a U.S.-popular hybrid-casual puzzle game",
+  "loadedDocuments": [
+    "doc2/FTUE 평가법(다듬어야 함) 2a3a0803cc8b80718116ca5ebc96b342.md",
+    "doc2/FTUE(First-Time User Experience) 최적화 가이드 1c5a0803cc8b8003bc67ddeea8116483.md",
+    "doc2/게임을 잘 만드는 법 1c0a0803cc8b80b1ba31de929bebddba.md",
+    "doc2/시장 조사 및 게임 아이디어 도출 가이드 1c5a0803cc8b80e18788d960f94af8ea.md"
+  ],
+  "knowledgePrinciples": [
+    "The first action must expose the core fun immediately.",
+    "Map the first-session funnel from first tap to first win.",
+    "Use visual cues and responsive feedback to keep goals readable.",
+    "Minimize FTUE friction such as login, forced waits, and paywalls.",
+    "The core loop should be simple, repeatable, and addictive.",
+    "Give fast, clear rewards tied to the player's action.",
+    "FTUE 평가법(다듬어야 함)",
+    "Note the hook, emotions, surprise, and confusion.",
+    "Is failure fair and teachy, or just punishing?",
+    "Map the user funnel: install → first tap → first win.",
+    "Analyze the core loop and progression.",
+    "Check readability: UI cues, VFX/SFX, feedback clarity.",
+    "Use a standard scorecard for hook, clarity, and session length.",
+    "Chart the reveal order: core loop → USP → meta → shop.",
+    "FTUE must create a strong hook in the first 30 seconds.",
+    "FTUE(First-Time User Experience) 최적화 가이드",
+    "초반 30초 내 강력한 인상으로 유저의 관심 사로잡기",
+    "긴 설명 대신 상호작용 중심의 짧고 명확한 튜토리얼 구성하기",
+    "첫 조작에서부터 핵심 재미 요소를 즉시 제공하기",
+    "스토리 및 캐릭터를 활용해 유저와 감정적 연결 형성하기",
+    "중요한 정보는 시각적 큐를 통해 직관적으로 안내하기",
+    "쉬운 시작 → 적당한 도전 → 명확한 보상 → 기대감의 루프 설계하기",
+    "초반 진입의 마찰 요소(긴 회원가입, 강제 튜토리얼 등)를 최소화하기",
+    "Concepts must be explainable in one sentence or a short video pitch.",
+    "Validate market appeal, target audience desire, and user value.",
+    "Prefer concepts that can be prototyped quickly with low execution risk.",
+    "코어루프 = 메카닉 × 테마",
+    "게임 구성요소 = 메카닉 + 테마 + 피드",
+    "게임 메카닉 조합시 고려사항 = 메카닉의 핵심재미 + 메카닉의 핵심재미 가 잘 융화되는가",
+    "1. 핵심 목표",
+    "시장 조사 및 게임 아이디어 도출 단계의 목표는, 성공 가능성이 높은 게임 아이디어를 선별하고 개발 전에 주요 리스크와 기회를 명확히 파악하여 투자 효율을 극대화하는 것이다.",
+    "시장성",
+    "유저 가치 제안(유저의 문제 해결)",
+    "MARKET 시장성과 트렌드 - 장르 시장 규모는 충분히 큰가?",
+    "AUDIENCE 타겟 유저에 대한 이해 - 우리 유저는 누구인가?",
+    "이들이 게임에서 진짜로 원하는 가치는 무엇인가?",
+    "비슷한 게임에 대해 어떤 피드백을 남겼는가?",
+    "이 게임은 어떤 '욕망'을 해결해주는가?",
+    "PITCH & EXPERIENCE 커뮤니케이션과 사용자 경험 - 한 문장으로 게임을 매력적으로 설명할 수 있는가?",
+    "15초짜리 재미있는 영상이 머릿속에 떠오르는가?",
+    "20분 뒤 플레이어는 무엇을 기억하게 될까?",
+    "코어 루프는 단순하면서 중독적인가?(메카닉)"
+  ],
+  "candidates": [
+    {
+      "id": "candidate-1",
+      "title": "Circuit Bloom",
+      "mechanicId": "path-link",
+      "theme": "connect matching energy nodes to bloom a tiny city garden",
+      "rules": [
+        "Draw links between matching nodes",
+        "Longer links charge a combo bloom"
+      ],
+      "marketHook": "calm matching plus combo blooms for short-session puzzle appeal",
+      "metaProgression": "collect petals to unlock three garden badges",
+      "knowledgeFit": [
+        "one-sentence pitch and fast hook",
+        "first action exposes the core fun",
+        "visible feedback and quick reward",
+        "U.S. hybrid-casual audience value",
+        "clear matching loop with low prototype risk"
+      ]
+    },
+    {
+      "id": "candidate-2",
+      "title": "Snack Stack",
+      "mechanicId": "merge-lane",
+      "theme": "merge snack tiles into higher-value treats before the tray fills",
+      "rules": [
+        "Merge matching snack tiles",
+        "Plan moves to keep lanes open"
+      ],
+      "marketHook": "snack-merging fantasy with clear collection goals",
+      "metaProgression": "collect stars to fill a snack shelf",
+      "knowledgeFit": [
+        "one-sentence pitch and fast hook",
+        "first action exposes the core fun",
+        "visible feedback and quick reward",
+        "U.S. hybrid-casual audience value",
+        "collection-friendly merge loop"
+      ]
+    },
+    {
+      "id": "candidate-3",
+      "title": "Parcel Pop",
+      "mechanicId": "shape-drop",
+      "theme": "drop package shapes into matching slots for combo deliveries",
+      "rules": [
+        "Place shapes into compatible slots",
+        "Chain perfect fits for delivery streaks"
+      ],
+      "marketHook": "spatial fit satisfaction with delivery-streak progression",
+      "metaProgression": "complete deliveries to stamp a route card",
+      "knowledgeFit": [
+        "one-sentence pitch and fast hook",
+        "first action exposes the core fun",
+        "visible feedback and quick reward",
+        "U.S. hybrid-casual audience value",
+        "strong spatial satisfaction but higher control risk"
+      ]
+    }
+  ],
+  "evaluations": [
+    {
+      "agent": "Market Agent",
+      "candidateId": "candidate-1",
+      "evidence": [
+        "Concepts must be explainable in one sentence or a short video pitch.",
+        "Validate market appeal, target audience desire, and user value.",
+        "MARKET 시장성과 트렌드 - 장르 시장 규모는 충분히 큰가?",
+        "one-sentence pitch and fast hook"
+      ],
+      "strengths": [
+        "calm matching plus combo blooms for short-session puzzle appeal",
+        "simple theme readable in a short demo"
+      ],
+      "fatalRisks": [
+        "collection goal must be visible or the play may feel like a one-off puzzle"
+      ],
+      "concreteImprovements": [
+        "make the first reward visible",
+        "show collection progress on the first screen"
+      ],
+      "score": 17
+    },
+    {
+      "agent": "Coreplay Agent",
+      "candidateId": "candidate-1",
+      "evidence": [
+        "The first action must expose the core fun immediately.",
+        "Use visual cues and responsive feedback to keep goals readable.",
+        "The core loop should be simple, repeatable, and addictive.",
+        "first action exposes the core fun"
+      ],
+      "strengths": [
+        "one clear core action",
+        "combo potential from repeated choices"
+      ],
+      "fatalRisks": [
+        "weak first-action feedback would make the game feel inert"
+      ],
+      "concreteImprovements": [
+        "add pulse feedback",
+        "add a fast first success cue"
+      ],
+      "score": 19
+    },
+    {
+      "agent": "Level Design Agent",
+      "candidateId": "candidate-1",
+      "evidence": [
+        "Map the first-session funnel from first tap to first win.",
+        "Use visual cues and responsive feedback to keep goals readable.",
+        "Is failure fair and teachy, or just punishing?",
+        "visible feedback and quick reward"
+      ],
+      "strengths": [
+        "three-level ramp can introduce, vary, then test the mechanic"
+      ],
+      "fatalRisks": [
+        "too many rules would obscure fairness"
+      ],
+      "concreteImprovements": [
+        "keep one goal per level",
+        "show moves and target progress"
+      ],
+      "score": 18
+    },
+    {
+      "agent": "Production Agent",
+      "candidateId": "candidate-1",
+      "evidence": [
+        "Minimize FTUE friction such as login, forced waits, and paywalls.",
+        "Prefer concepts that can be prototyped quickly with low execution risk.",
+        "U.S. hybrid-casual audience value"
+      ],
+      "strengths": [
+        "static HTML prototype is feasible",
+        "one-sentence pitch and fast hook",
+        "first action exposes the core fun"
+      ],
+      "fatalRisks": [
+        "demo needs clear restart and no hidden state"
+      ],
+      "concreteImprovements": [
+        "avoid physics",
+        "prefer deterministic tile interactions"
+      ],
+      "score": 19
+    },
+    {
+      "agent": "Market Agent",
+      "candidateId": "candidate-2",
+      "evidence": [
+        "Concepts must be explainable in one sentence or a short video pitch.",
+        "Validate market appeal, target audience desire, and user value.",
+        "MARKET 시장성과 트렌드 - 장르 시장 규모는 충분히 큰가?",
+        "one-sentence pitch and fast hook"
+      ],
+      "strengths": [
+        "snack-merging fantasy with clear collection goals",
+        "simple theme readable in a short demo"
+      ],
+      "fatalRisks": [
+        "collection goal must be visible or the play may feel like a one-off puzzle"
+      ],
+      "concreteImprovements": [
+        "make the first reward visible",
+        "show collection progress on the first screen"
+      ],
+      "score": 18
+    },
+    {
+      "agent": "Coreplay Agent",
+      "candidateId": "candidate-2",
+      "evidence": [
+        "The first action must expose the core fun immediately.",
+        "Use visual cues and responsive feedback to keep goals readable.",
+        "The core loop should be simple, repeatable, and addictive.",
+        "first action exposes the core fun"
+      ],
+      "strengths": [
+        "one clear core action",
+        "combo potential from repeated choices"
+      ],
+      "fatalRisks": [
+        "weak first-action feedback would make the game feel inert"
+      ],
+      "concreteImprovements": [
+        "add pulse feedback",
+        "add a fast first success cue"
+      ],
+      "score": 16
+    },
+    {
+      "agent": "Level Design Agent",
+      "candidateId": "candidate-2",
+      "evidence": [
+        "Map the first-session funnel from first tap to first win.",
+        "Use visual cues and responsive feedback to keep goals readable.",
+        "Is failure fair and teachy, or just punishing?",
+        "visible feedback and quick reward"
+      ],
+      "strengths": [
+        "three-level ramp can introduce, vary, then test the mechanic"
+      ],
+      "fatalRisks": [
+        "too many rules would obscure fairness"
+      ],
+      "concreteImprovements": [
+        "keep one goal per level",
+        "show moves and target progress"
+      ],
+      "score": 15
+    },
+    {
+      "agent": "Production Agent",
+      "candidateId": "candidate-2",
+      "evidence": [
+        "Minimize FTUE friction such as login, forced waits, and paywalls.",
+        "Prefer concepts that can be prototyped quickly with low execution risk.",
+        "U.S. hybrid-casual audience value"
+      ],
+      "strengths": [
+        "static HTML prototype is feasible",
+        "one-sentence pitch and fast hook",
+        "first action exposes the core fun"
+      ],
+      "fatalRisks": [
+        "demo needs clear restart and no hidden state"
+      ],
+      "concreteImprovements": [
+        "avoid physics",
+        "prefer deterministic tile interactions"
+      ],
+      "score": 15
+    },
+    {
+      "agent": "Market Agent",
+      "candidateId": "candidate-3",
+      "evidence": [
+        "Concepts must be explainable in one sentence or a short video pitch.",
+        "Validate market appeal, target audience desire, and user value.",
+        "MARKET 시장성과 트렌드 - 장르 시장 규모는 충분히 큰가?",
+        "one-sentence pitch and fast hook"
+      ],
+      "strengths": [
+        "spatial fit satisfaction with delivery-streak progression",
+        "simple theme readable in a short demo"
+      ],
+      "fatalRisks": [
+        "spatial fit may read more midcore than hybrid-casual if controls are unclear"
+      ],
+      "concreteImprovements": [
+        "make the first reward visible",
+        "show collection progress on the first screen"
+      ],
+      "score": 17
+    },
+    {
+      "agent": "Coreplay Agent",
+      "candidateId": "candidate-3",
+      "evidence": [
+        "The first action must expose the core fun immediately.",
+        "Use visual cues and responsive feedback to keep goals readable.",
+        "The core loop should be simple, repeatable, and addictive.",
+        "first action exposes the core fun"
+      ],
+      "strengths": [
+        "one clear core action",
+        "combo potential from repeated choices"
+      ],
+      "fatalRisks": [
+        "weak first-action feedback would make the game feel inert"
+      ],
+      "concreteImprovements": [
+        "add pulse feedback",
+        "add a fast first success cue"
+      ],
+      "score": 16
+    },
+    {
+      "agent": "Level Design Agent",
+      "candidateId": "candidate-3",
+      "evidence": [
+        "Map the first-session funnel from first tap to first win.",
+        "Use visual cues and responsive feedback to keep goals readable.",
+        "Is failure fair and teachy, or just punishing?",
+        "visible feedback and quick reward"
+      ],
+      "strengths": [
+        "three-level ramp can introduce, vary, then test the mechanic"
+      ],
+      "fatalRisks": [
+        "too many rules would obscure fairness"
+      ],
+      "concreteImprovements": [
+        "keep one goal per level",
+        "show moves and target progress"
+      ],
+      "score": 15
+    },
+    {
+      "agent": "Production Agent",
+      "candidateId": "candidate-3",
+      "evidence": [
+        "Minimize FTUE friction such as login, forced waits, and paywalls.",
+        "Prefer concepts that can be prototyped quickly with low execution risk.",
+        "U.S. hybrid-casual audience value"
+      ],
+      "strengths": [
+        "static HTML prototype is feasible",
+        "one-sentence pitch and fast hook",
+        "first action exposes the core fun"
+      ],
+      "fatalRisks": [
+        "shape placement can imply physics or drag complexity outside MVP scope"
+      ],
+      "concreteImprovements": [
+        "avoid physics",
+        "prefer deterministic tile interactions"
+      ],
+      "score": 15
+    }
+  ]
+}

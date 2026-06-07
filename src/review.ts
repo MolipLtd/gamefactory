@@ -16,8 +16,15 @@ function renderReview(result: PipelineResult): string {
       (candidate) =>
         `<li><strong>${escapeHtml(candidate.title)}</strong>: ${escapeHtml(
           candidate.marketHook,
-        )}</li>`,
+        )}<br><span class="small">${escapeHtml(candidate.knowledgeFit.join(" | "))}</span></li>`,
     )
+    .join("")
+  const documents = result.candidateDebate.loadedDocuments
+    .map((documentPath) => `<li>${escapeHtml(documentPath)}</li>`)
+    .join("")
+  const principles = result.candidateDebate.knowledgePrinciples
+    .slice(0, 6)
+    .map((principle) => `<li>${escapeHtml(principle)}</li>`)
     .join("")
   const agentDebate = result.candidateDebate.evaluations
     .slice(0, 4)
@@ -25,7 +32,7 @@ function renderReview(result: PipelineResult): string {
       (evaluation) =>
         `<li><strong>${escapeHtml(evaluation.agent)}</strong>: ${escapeHtml(
           evaluation.strengths[0] ?? "candidate reviewed",
-        )}; risk: ${escapeHtml(evaluation.fatalRisks[0] ?? "none")}</li>`,
+        )}; evidence: ${escapeHtml(evaluation.evidence[0] ?? "knowledge reviewed")}</li>`,
     )
     .join("")
   const improvements = result.improvementReport.improvements
@@ -59,7 +66,17 @@ a{color:#0f6fff}.score{font-size:34px;font-weight:800}.small{color:#5f6f7a;font-
 <p>Agents debated ${result.candidateDebate.candidates.length} candidates, Judge selected <strong>${escapeHtml(
     result.judgeDecision.selectedTitle,
   )}</strong>, the prototype was built, agents re-evaluated it, and only the top 3 weaknesses were improved.</p>
+<p>Final score: <strong>${result.finalScorecard.total}/35</strong> · Top improvements: ${escapeHtml(
+    result.improvementPriorities.join(", "),
+  )}</p>
 <a href="prototype/index.html">Open final playable prototype</a>
+</section>
+<section class="panel">
+<h2>Loaded User Knowledge</h2>
+<ul>${documents}</ul>
+<h3>Key Success Factors Applied To Idea Validation</h3>
+<ul>${principles}</ul>
+<a href="artifacts/knowledge-trace.md">Inspect knowledge trace</a>
 </section>
 <section class="evidence">
 <div class="panel">

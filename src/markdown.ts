@@ -13,25 +13,35 @@ export function candidateDebateMarkdown(debate: CandidateDebate): string {
   const candidates = debate.candidates
     .map(
       (candidate) =>
-        `## ${candidate.title}\n\nMechanic: ${candidate.mechanicId}\n\n${candidate.theme}\n\nMarket hook: ${candidate.marketHook}\n`,
+        `## ${candidate.title}\n\nMechanic: ${candidate.mechanicId}\n\n${candidate.theme}\n\nMarket hook: ${candidate.marketHook}\n\nKnowledge fit:\n${bullets(
+          candidate.knowledgeFit,
+        )}\n`,
     )
     .join("\n")
   const evaluations = debate.evaluations
     .map(
       (evaluation) =>
-        `### ${evaluation.agent} on ${evaluation.candidateId}\n\nStrengths:\n${bullets(
+        `### ${evaluation.agent} on ${evaluation.candidateId}\n\nDocument evidence:\n${bullets(
+          evaluation.evidence,
+        )}\n\nStrengths:\n${bullets(
           evaluation.strengths,
         )}\n\nFatal risks:\n${bullets(evaluation.fatalRisks)}\n\nConcrete improvements:\n${bullets(
           evaluation.concreteImprovements,
         )}\n\nScore: ${evaluation.score}\n`,
     )
     .join("\n")
-  return `# Candidate Debate\n\nPrompt: ${debate.prompt}\n\n${candidates}\n# Agent Evaluations\n\n${evaluations}`
+  return `# Candidate Debate\n\nPrompt: ${debate.prompt}\n\n## Loaded Documents\n\n${bullets(
+    debate.loadedDocuments,
+  )}\n\n## Extracted Knowledge Principles\n\n${bullets(
+    debate.knowledgePrinciples,
+  )}\n\n${candidates}\n# Agent Evaluations\n\n${evaluations}`
 }
 
 export function judgeDecisionMarkdown(decision: JudgeDecision): string {
   return `# Judge Decision\n\nSelected concept: **${decision.selectedTitle}** (${decision.selectedCandidateId})\n\n${decision.rationale}\n\n## Build Priorities\n\n${bullets(
     decision.buildPriorities,
+  )}\n\n## Knowledge Evidence\n\n${bullets(
+    decision.knowledgeEvidence,
   )}\n\n## Rejected Candidates\n\n${bullets(decision.rejectedCandidates)}\n`
 }
 
@@ -39,7 +49,9 @@ export function postBuildDebateMarkdown(debate: PostBuildDebate): string {
   const evaluations = debate.evaluations
     .map(
       (evaluation) =>
-        `## ${evaluation.agent}\n\nStrengths:\n${bullets(
+        `## ${evaluation.agent}\n\nDocument evidence:\n${bullets(
+          evaluation.evidence,
+        )}\n\nStrengths:\n${bullets(
           evaluation.strengths,
         )}\n\nFatal risks:\n${bullets(evaluation.fatalRisks)}\n\nConcrete improvements:\n${bullets(
           evaluation.concreteImprovements,
@@ -55,14 +67,16 @@ export function improvementRationaleMarkdown(rationale: ImprovementRationale): s
     .join("\n")
   return `# Improvement Rationale\n\n${rationale.judgeSummary}\n\n## Selected Top 3\n\n${selected}\n\n## Evidence\n\n${bullets(
     rationale.evidence,
-  )}\n`
+  )}\n\n## Knowledge Evidence\n\n${bullets(rationale.knowledgeEvidence)}\n`
 }
 
 export function debateMarkdown(debate: DebateSummary): string {
   const positions = debate.positions
     .map(
       (position) =>
-        `### ${position.agent}\n\n${position.position}\n\nPriorities:\n${bullets(position.priorities)}\n`,
+        `### ${position.agent}\n\n${position.position}\n\nPriorities:\n${bullets(
+          position.priorities,
+        )}\n\nEvidence:\n${bullets(position.evidence)}\n`,
     )
     .join("\n")
   return `# Multi-Agent Debate\n\nPrompt: ${debate.prompt}\n\n${positions}\n## Judge Priorities\n\n${bullets(

@@ -61,6 +61,7 @@ export function createImprovementRationale(
   improvements: readonly Improvement[],
   scorecard: Scorecard,
   postBuildDebate: PostBuildDebate,
+  principles: readonly string[],
 ): ImprovementRationale {
   const selectedDimensions = improvements.map((improvement) => improvement.dimension)
   const rubricEvidence = scorecard.dimensions
@@ -79,6 +80,7 @@ export function createImprovementRationale(
         ),
       ),
     ],
+    knowledgeEvidence: selectImprovementKnowledgeEvidence(principles),
     judgeSummary:
       "Judge selected the top 3 improvements by combining lowest rubric dimensions with repeated agent risks and concrete improvement recommendations.",
   }
@@ -171,6 +173,7 @@ function applyImprovement(
 
 function mapEvaluationToDimensions(evaluation: CandidateEvaluation): readonly RubricDimensionId[] {
   const joined = [
+    ...evaluation.evidence,
     ...evaluation.fatalRisks,
     ...evaluation.concreteImprovements,
     ...evaluation.strengths,
@@ -186,4 +189,23 @@ function mapEvaluationToDimensions(evaluation: CandidateEvaluation): readonly Ru
     dimensions.push("hybrid-casual-appeal")
   }
   return dimensions
+}
+
+function selectImprovementKnowledgeEvidence(principles: readonly string[]): readonly string[] {
+  const needles = [
+    "first action",
+    "first tap",
+    "first win",
+    "30 seconds",
+    "visual",
+    "feedback",
+    "reward",
+    "friction",
+    "goal",
+  ] as const
+  const selected = principles.filter((principle) => {
+    const normalized = principle.toLowerCase()
+    return needles.some((needle) => normalized.includes(needle))
+  })
+  return (selected.length > 0 ? selected : principles).slice(0, 6)
 }

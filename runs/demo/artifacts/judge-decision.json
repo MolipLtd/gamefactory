@@ -1,0 +1,21 @@
+{
+  "selectedCandidateId": "candidate-1",
+  "selectedTitle": "Circuit Bloom",
+  "rationale": "Circuit Bloom best satisfies the loaded user knowledge: one-sentence clarity, fast FTUE feedback, first-win funnel, and low-risk prototype feasibility.",
+  "knowledgeEvidence": [
+    "one-sentence pitch and fast hook",
+    "first action exposes the core fun",
+    "visible feedback and quick reward",
+    "U.S. hybrid-casual audience value",
+    "clear matching loop with low prototype risk"
+  ],
+  "rejectedCandidates": [
+    "Snack Stack: lower combined agent confidence against the loaded success factors",
+    "Parcel Pop: lower combined agent confidence against the loaded success factors"
+  ],
+  "buildPriorities": [
+    "5-second clarity",
+    "immediate feedback",
+    "first success"
+  ]
+}

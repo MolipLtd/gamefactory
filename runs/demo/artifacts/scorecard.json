@@ -1,0 +1,49 @@
+{
+  "dimensions": [
+    {
+      "id": "5-second-clarity",
+      "label": "5-Second Clarity",
+      "score": 4,
+      "rationale": "Instruction cue and visible goal are immediately understandable."
+    },
+    {
+      "id": "immediate-feedback",
+      "label": "Immediate Fun / Feedback",
+      "score": 5,
+      "rationale": "First actions produce visible, score, or state feedback."
+    },
+    {
+      "id": "first-success",
+      "label": "First Success",
+      "score": 4,
+      "rationale": "Level 1 creates a quick meaningful win."
+    },
+    {
+      "id": "fair-challenge",
+      "label": "Fair Challenge",
+      "score": 4,
+      "rationale": "Failure states explain moves, goals, and what to improve."
+    },
+    {
+      "id": "strategic-depth",
+      "label": "Strategic Depth",
+      "score": 4,
+      "rationale": "The mechanic supports choices beyond pure tapping."
+    },
+    {
+      "id": "hybrid-casual-appeal",
+      "label": "Hybrid-Casual Appeal",
+      "score": 4,
+      "rationale": "A lightweight collection or progression layer exists."
+    },
+    {
+      "id": "production-stability",
+      "label": "Production / Demo Stability",
+      "score": 4,
+      "rationale": "The prototype is readable, restartable, and demo-stable."
+    }
+  ],
+  "total": 29,
+  "funEnough": true,
+  "threshold": "total score >= 24/35 and no dimension below 3"
+}
