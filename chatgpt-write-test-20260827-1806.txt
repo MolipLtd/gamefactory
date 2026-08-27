@@ -1,2 +1,0 @@
-ChatGPT GitHub connector write test for MolipLtd/gamefactory.
-Created on 2026-08-27 to verify direct remote commit capability.
